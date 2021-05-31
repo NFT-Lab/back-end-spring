@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -32,6 +33,7 @@ public class User {
 	private String password;
 	
 	@Column(name="wallet")
+	@Pattern(regexp="^[A-Fa-f0-9]")  
 	private String wallet;
 	
 	//Contructor ----------------------------------------------------------------------------------------------

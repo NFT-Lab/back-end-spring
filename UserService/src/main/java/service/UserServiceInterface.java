@@ -10,5 +10,7 @@ public interface UserServiceInterface {
 	
 	public boolean checkEmail(User user);
 	public boolean checkEmailPassword(User user);
+	public boolean checkId(int id);
+	public boolean checkWallet(String wallet);
 	
 }

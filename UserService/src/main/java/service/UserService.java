@@ -47,8 +47,16 @@ public class UserService implements UserServiceInterface {
 		user.setPassword(Integer.toString(user.getPassword().hashCode()));
 		return repo.existsUsersByEmailAndPassword(user.getEmail(), user.getPassword());
 	}
+	@Override
+	public boolean checkId(int id) {
+		return repo.existsById(id);
+	}
+	@Override
+	public boolean checkWallet(String wallet) {
+		if(wallet.length() != 34 ) {
+			return true;
+		}
+		return false;
+	}
 	
-	
-	
-
 }
