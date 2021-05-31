@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,7 +19,6 @@ import user.UserPayload;
 @CrossOrigin(origins = "http://localhost:8080")
 public class Controller implements ControllerInterface {
 
-	
 	@Autowired
 	private UserServiceInterface service;
 	
@@ -30,7 +30,7 @@ public class Controller implements ControllerInterface {
 			return ResponseEntity.badRequest().body("Email o Password Vuote");
 		}
 		if(service.checkEmailPassword(user)) {
-			return ResponseEntity.ok().body(service.getUserData(user));
+			return ResponseEntity.ok().body(service.getUserByEmail(user));
 		}
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("L'utente non esiste");
 	}
@@ -87,6 +87,14 @@ public class Controller implements ControllerInterface {
 			return ResponseEntity.ok().body(tempUser);
 		}
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+	
+	//methods for NFTService -------------------------------------------------------------------------
+	@GetMapping("/nftUser/{id}")
+	@Override
+	public ResponseEntity<?> getUserById(@PathVariable("id") int id) {
+		User user = service.getUserById(id);
+		return ResponseEntity.ok().body(user.getName() + " " + user.getSurname());
 	}
 	
 }

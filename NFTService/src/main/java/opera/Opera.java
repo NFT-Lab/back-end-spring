@@ -1,5 +1,7 @@
 package opera;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Opera {
 	private String id;
 	private String title;
@@ -14,6 +16,8 @@ public class Opera {
 
 	private String encoding;
 	private String path;
+	
+	@JsonProperty( value = "password", access = JsonProperty.Access.WRITE_ONLY)
 	private int userId;
 	
 	public Opera(){};

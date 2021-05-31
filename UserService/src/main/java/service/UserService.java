@@ -34,8 +34,12 @@ public class UserService implements UserServiceInterface {
 		return this.addUser(user);
 	}
 	@Override
-	public User getUserData(User user) {
+	public User getUserByEmail(User user) {
 		return repo.findUsersByEmail(user.getEmail());
+	}
+	@Override
+	public User getUserById(int id) {
+		return repo.findById(id).get();
 	}
 	//check methods ------------------------------------------------------------
 	@Override
@@ -58,5 +62,6 @@ public class UserService implements UserServiceInterface {
 		}
 		return false;
 	}
+	
 	
 }

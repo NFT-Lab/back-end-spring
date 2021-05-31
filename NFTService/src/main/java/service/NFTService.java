@@ -3,6 +3,7 @@ package service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.RestTemplate;
 
 import opera.Opera;
 import repository.NFTJpaRepository;
@@ -16,6 +17,10 @@ public class NFTService implements NFTServiceInterface {
 	}
 	@Override
 	public Opera saveOpera(Opera op) throws Exception {
+		//let's search for the name and surname of the owner id
+		RestTemplate restTemplate = new RestTemplate();
+		op.setOwner(restTemplate.getForObject("http://user-service/nftUser" + op.getUserId(), String.class));
+		
 		return repo.save(op);
 	}
 
