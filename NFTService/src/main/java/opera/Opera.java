@@ -4,8 +4,14 @@ public class Opera {
 	private String id;
 	private String title;
 	private String description;
-	private boolean status;
+	private String author;
+	private String owner; //non viene inserito nel db ma creato per il front end
+	
 	private double price;
+	private String currency;
+	
+	private boolean status;
+
 	private String encoding;
 	private String path;
 	private int userId;
@@ -66,6 +72,24 @@ public class Opera {
 	}
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+	public String getAuthor() {
+		return author;
+	}
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+	public String getOwner() {
+		return owner;
+	}
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+	public String getCurrency() {
+		return currency;
+	}
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 	
 	
