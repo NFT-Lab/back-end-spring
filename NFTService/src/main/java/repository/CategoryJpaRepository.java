@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import opera.Category;
 
 @Repository
-public interface CategoryJpaRepository extends JpaRepository<Category, Long> {
+public interface CategoryJpaRepository extends JpaRepository<Category, Integer> {
 
 }
