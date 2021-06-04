@@ -3,6 +3,8 @@ package service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -21,6 +23,9 @@ public class NFTService implements NFTServiceInterface {
 	private OperaCategoryRepository repoOpeCat;
 	
 	@Autowired
+	private RestTemplate restTemplate;
+	
+	@Autowired
 	public NFTService(NFTJpaRepository repoNFT, CategoryJpaRepository repoCat, OperaCategoryRepository repoOpeCat) {
 		this.repoNFT = repoNFT;
 		this.repoCategory = repoCat;
@@ -29,11 +34,30 @@ public class NFTService implements NFTServiceInterface {
 	@Override
 	public Opera saveOpera(Opera op) throws Exception {
 		//let's search for the name and surname of the owner id
-		RestTemplate restTemplate = new RestTemplate();
-		op.setOwner(restTemplate.getForObject("http://user-service/nftUser" + op.getUserId(), String.class));
 		return repoNFT.save(op);
 	}
-	
+	@Transactional
+	@Override
+	public Opera modifyOpera(Opera op) {
+		System.out.println(1);
+		op = repoNFT.save(op);
+		int i = 0;
+		System.out.println(2);
+		repoOpeCat.deleteAllByIdOpera(op.getId());
+		System.out.println(2.01);
+		if(op.getCategory() != null) {
+			while(i < op.getCategory().size()) {
+
+				System.out.println(2.1);
+				repoOpeCat.save(new OperaCategory(op.getId(), op.getCategory().get(i).getId()));
+				System.out.println(2.2);
+				i++;
+			}
+		}
+		System.out.println(3);
+		op.setOwner(restTemplate.getForObject("http://user-service/nftUser/" + op.getUserId(), String.class));
+		return op;
+	}
 	@Override
 	public List<Opera> getAllOpera() {
 		List<Opera> listOpera = repoNFT.findAll();
@@ -79,5 +103,10 @@ public class NFTService implements NFTServiceInterface {
 		}
 		return listOpera;
 	}
+	@Override
+	public boolean checkExistsOpera(String idOpera) {
+		return repoNFT.existsById(idOpera);
+	}
+	
 
 }

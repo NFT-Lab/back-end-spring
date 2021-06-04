@@ -14,6 +14,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackages = "opera")
 @ComponentScan(basePackages = "controller")
 @ComponentScan(basePackages = "service")
+@ComponentScan(basePackages = "configuration")
 public class NftServiceApplication {
 
 	public static void main(String[] args) {

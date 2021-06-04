@@ -47,6 +47,7 @@ public class Opera {
 	//info to send to front end ---------------------------------------------------------
 	@Transient
 	private String owner; 
+	@JsonProperty( value = "encoding", access = JsonProperty.Access.WRITE_ONLY)
 	@Transient
 	private String encoding;
 	@Transient

@@ -7,6 +7,8 @@ import opera.Opera;
 
 public interface NFTServiceInterface {
 	public Opera saveOpera(Opera op) throws Exception;
+	public Opera modifyOpera(Opera op);
+	
 	public Opera getOpera(String str);
 	
 	public List<Opera> getAllOpera();
@@ -14,4 +16,5 @@ public interface NFTServiceInterface {
 	
 	public List<Opera> getAllOperaByUserId(int id);
 	
+	public boolean checkExistsOpera(String idOpera);
 }

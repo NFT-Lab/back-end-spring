@@ -9,4 +9,5 @@ import opera.OperaCategory;
 @Repository
 public interface OperaCategoryRepository extends JpaRepository<OperaCategory, Integer>{
 	public List<OperaCategory> findAllByIdOpera(String idOpera);
+	public void deleteAllByIdOpera(String idOpera);
 }

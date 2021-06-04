@@ -17,6 +17,12 @@ public class OperaCategory {
 	@Id @Column(name="Id_Cat")
 	private int idCategory;
 	
+	public OperaCategory() {}
+	
+	public OperaCategory(String idOpera, int idCategory) {
+		this.idOpera = idOpera;
+		this.idCategory = idCategory;
+	}
 	
 	public String getIdOpera() {
 		return idOpera;
