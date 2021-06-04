@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import service.UserServiceInterface;
+import user.NFTUserRequest;
 import user.User;
 import user.UserPayload;
 
@@ -93,8 +94,8 @@ public class Controller implements ControllerInterface {
 	@GetMapping("/nftUser/{id}")
 	@Override
 	public ResponseEntity<?> getUserById(@PathVariable("id") int id) {
-		User user = service.getUserById(id);
-		return ResponseEntity.ok().body(user.getName() + " " + user.getSurname());
+		NFTUserRequest user = new NFTUserRequest(service.getUserById(id));
+		return ResponseEntity.ok().body(user);
 	}
 	
 }

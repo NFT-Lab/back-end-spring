@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import opera.Opera;
 import service.NFTService;
@@ -23,15 +24,18 @@ public class Controller implements ControllerInterface {
 		this.service = service;
 	}
 	
-	@PostMapping(value = "/nft/user/{userId}", consumes = "APPLICATION/MULT_PART_FORM_DATA")
+	@PostMapping(value = "/nft/user/{userId}", consumes = "multipart/form-data")
 	@Override
-	public ResponseEntity<?> insertOpera(@RequestPart() Opera opera, @PathVariable("userId")int id) {
-		if(opera.getEncoding().isBlank() || id != opera.getUserId()) {
+	public ResponseEntity<?> insertOpera(@RequestPart("opera") Opera opera, @PathVariable("userId")int id, @RequestPart("file") MultipartFile file) {
+		/*if(opera.getEncoding().isBlank() || id != opera.getUserId()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Alcune informazioni fondamentali sono mancanti");
-		}
+		}*/
+		
+		
 		try {
 			opera.setUserId(id);
-			service.saveOpera(opera);
+			System.out.println("Sono prima del save");
+			service.saveOpera(opera,file);
 		}catch(Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Si è riscontrato un errore nel salvataggio dell'opera");
 		}

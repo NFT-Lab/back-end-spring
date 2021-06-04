@@ -2,11 +2,13 @@ package service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import opera.Category;
 import opera.Opera;
 
 public interface NFTServiceInterface {
-	public Opera saveOpera(Opera op) throws Exception;
+	public Opera saveOpera(Opera op, MultipartFile file) throws Exception;
 	public Opera modifyOpera(Opera op);
 	
 	public Opera getOpera(String str);

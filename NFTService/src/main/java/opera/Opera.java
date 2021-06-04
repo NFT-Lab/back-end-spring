@@ -1,5 +1,6 @@
 package opera;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -52,6 +53,8 @@ public class Opera {
 	private String encoding;
 	@Transient
 	private List<Category> listCategory;
+	@Transient
+	private BigInteger tokenId;
 	
 	//constructor -----------------------------------------------------------------------
 	public Opera(){};
@@ -155,6 +158,12 @@ public class Opera {
 	}
 	public void setCategory(List<Category> listCategory) {
 		this.listCategory = listCategory;
+	}
+	public BigInteger getTokenId() {
+		return tokenId;
+	}
+	public void setTokenId(BigInteger tokenId) {
+		this.tokenId = tokenId;
 	}
 		
 }
