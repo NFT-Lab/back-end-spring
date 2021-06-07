@@ -14,7 +14,7 @@
 	<name>UserService</name>
 	<description>Users service for stage</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>15</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -50,6 +50,12 @@
           <artifactId>mockito-all</artifactId>
           <version>1.9.5</version>
       </dependency>
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>testcontainers</artifactId>
+    <version>1.15.3</version>
+    <scope>test</scope>
+</dependency>
 	</dependencies>
 	<build>
 		<plugins>

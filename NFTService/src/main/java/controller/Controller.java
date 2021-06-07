@@ -2,6 +2,7 @@ package controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,13 +25,10 @@ public class Controller implements ControllerInterface {
 		this.service = service;
 	}
 	
-	@PostMapping(value = "/nft/user/{userId}", consumes = "multipart/form-data")
+	@PostMapping(value = "/nft/user/{userId}", consumes = {MediaType.APPLICATION_OCTET_STREAM_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
 	@Override
-	public ResponseEntity<?> insertOpera(@RequestPart("opera") Opera opera, @PathVariable("userId")int id, @RequestPart("file") MultipartFile file) {
-		/*if(opera.getEncoding().isBlank() || id != opera.getUserId()) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Alcune informazioni fondamentali sono mancanti");
-		}*/
-		
+	public ResponseEntity<?> insertOpera(@RequestPart("opera") Opera opera, @PathVariable("userId")int id, @RequestPart("file")MultipartFile file) {
+		System.out.println(opera);
 		
 		try {
 			opera.setUserId(id);

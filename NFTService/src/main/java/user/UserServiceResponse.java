@@ -49,4 +49,8 @@ public class UserServiceResponse {
 	public void setWallet(String wallet) {
 		this.wallet = wallet;
 	}
+	//methods for owner
+	public String getOwner() {
+		return this.name +" "+ this.surname;
+	}
 }

@@ -7,12 +7,9 @@ import repository.JPAUserRepository;
 import user.User;
 @Service
 public class UserService implements UserServiceInterface {
-
-	private JPAUserRepository repo;
 	@Autowired
-	public UserService(JPAUserRepository repo) {
-		this.repo = repo;
-	}
+	private JPAUserRepository repo;
+	
 	//operation method --------------------------------------------------------
 	@Override
 	public User addUser(User user) throws Exception {

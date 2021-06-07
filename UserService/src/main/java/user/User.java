@@ -35,7 +35,7 @@ public class User {
 	private String password;
 	
 	@Column(name="wallet")
-	@Pattern(regexp="^[A-Fa-f0-9]")  
+	@Pattern(regexp="^0x[a-fA-F0-9]{40}$")  
 	private String wallet;
 	
 	//Contructor ----------------------------------------------------------------------------------------------

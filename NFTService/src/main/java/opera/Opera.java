@@ -45,17 +45,16 @@ public class Opera {
 	@JsonProperty( value = "userId", access = JsonProperty.Access.WRITE_ONLY)
 	private int userId;
 	
+	@Column(name="Token_id")
+	@JsonProperty( value = "userId", access = JsonProperty.Access.WRITE_ONLY)
+	private BigInteger tokenId;
+	
 	//info to send to front end ---------------------------------------------------------
 	@Transient
 	private String owner; 
-	@JsonProperty( value = "encoding", access = JsonProperty.Access.WRITE_ONLY)
-	@Transient
-	private String encoding;
 	@Transient
 	private List<Category> listCategory;
-	@Transient
-	private BigInteger tokenId;
-	
+
 	//constructor -----------------------------------------------------------------------
 	public Opera(){};
 	public Opera(String title, boolean status, double price, int userId) {
@@ -64,7 +63,6 @@ public class Opera {
 		this.price = price;
 		this.userId = userId;
 	}
-	
 	
 	//methods getter/setter -------------------------------------------------------------
 	public String getId() {
@@ -145,14 +143,6 @@ public class Opera {
 	public void setOwner(String owner) {
 		this.owner = owner;
 	}
-	
-	public String getEncoding() {
-		return encoding;
-	}
-	public void setEncoding(String encoding) {
-		this.encoding = encoding;
-	}
-	
 	public List<Category> getCategory(){
 		return listCategory;
 	}

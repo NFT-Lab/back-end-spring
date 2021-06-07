@@ -3,19 +3,17 @@ package service;
 import io.nfteam.nftlab.services.*;
 import io.nfteam.nftlab.services.smartcontract.*;
 import java.math.BigInteger;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import file.FileConstruction;
 import opera.Category;
 import opera.Opera;
 import opera.OperaCategory;
@@ -32,6 +30,7 @@ public class NFTService implements NFTServiceInterface {
 	private OperaCategoryRepository repoOpeCat;
 	
 	private NFTContractService contractService;
+	private FileConstruction fileConstruct = new FileConstruction();
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -46,42 +45,36 @@ public class NFTService implements NFTServiceInterface {
 	@Override
 	public Opera saveOpera(Opera op, MultipartFile file) throws Exception {
 		//let's search for the name and surname of the owner id
-		UserServiceResponse user = restTemplate.getForObject("http://user-service/nftUser/" + op.getUserId(), UserServiceResponse.class);
-		try {
-		      Files.copy(file.getInputStream(), Paths.get("NotDecodeImg").resolve(file.getOriginalFilename()));
-		    } catch (Exception e) {
-		      throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
-		    }
-		NFTID temp = contractService.mint(new UserTuple(user.getWallet(),BigInteger.valueOf(op.getUserId())) , new FileSystemResource("./NotDecodeImg/" + file.getName()));
+		UserServiceResponse user = this.getUser(op);
+		//let's add the owner
+		op.setOwner(user.getOwner());
 		
-		System.out.println("ho creato temp");
+		String path = "gallery/" + op.getType().toString();
+		
+		//generate hashId with nftlab library
+		NFTID temp = contractService.mint(new UserTuple(user.getWallet(),BigInteger.valueOf(op.getUserId())) , fileConstruct.ConstructFile(file));
 		op.setId(temp.hash());
-		System.out.println("ho creato ID");
 		op.setTokenId(temp.tokenId());
-		System.out.println("ho creato tokenId");
+		
+		//save the file + set path
+		path = path + fileConstruct.saveFile(file, path, temp.hash());
+		op.setPath(path);
+		//insert category
+		this.insertCategory(op);
+		
+		repoNFT.save(op);
 		return op;
 	}
 	@Transactional
 	@Override
 	public Opera modifyOpera(Opera op) {
-		System.out.println(1);
 		op = repoNFT.save(op);
-		int i = 0;
-		System.out.println(2);
+		
 		repoOpeCat.deleteAllByIdOpera(op.getId());
-		System.out.println(2.01);
-		if(op.getCategory() != null) {
-			while(i < op.getCategory().size()) {
-
-				System.out.println(2.1);
-				repoOpeCat.save(new OperaCategory(op.getId(), op.getCategory().get(i).getId()));
-				System.out.println(2.2);
-				i++;
-			}
-		}
-		System.out.println(3);
-		UserServiceResponse user = restTemplate.getForObject("http://user-service/nftUser/" + op.getUserId(), UserServiceResponse.class);
-		op.setOwner(user.getName() + user.getSurname());
+		
+		this.insertCategory(op);
+		
+		op.setOwner(this.getUser(op).getOwner());
 		return op;
 	}
 	@Override
@@ -134,5 +127,19 @@ public class NFTService implements NFTServiceInterface {
 		return repoNFT.existsById(idOpera);
 	}
 	
+	//methods for the class
+	private void insertCategory(Opera op) {
+		int i = 0;
+		if(op.getCategory() != null) {
+			while(i < op.getCategory().size()) {
+				repoOpeCat.save(new OperaCategory(op.getId(), op.getCategory().get(i).getId()));
+				i++;
+			}
+		}
+	}
+	private UserServiceResponse getUser(Opera op) {
+		UserServiceResponse user = restTemplate.getForObject("http://user-service/nftUser/" + op.getUserId(), UserServiceResponse.class);
+		return user;
+	}
 
 }
