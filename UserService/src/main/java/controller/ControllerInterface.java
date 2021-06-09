@@ -14,4 +14,5 @@ public interface ControllerInterface {
 	
 	//methods for NFTService
 	public ResponseEntity<?> getUserById(int id);
+	public ResponseEntity<?> getUserWalletById(int id);
 }

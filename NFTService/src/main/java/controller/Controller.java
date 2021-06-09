@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import opera.Opera;
 import service.NFTService;
+import transaction.TransactionPayload;
 @RestController
 public class Controller implements ControllerInterface {
 	
@@ -32,7 +33,6 @@ public class Controller implements ControllerInterface {
 		
 		try {
 			opera.setUserId(id);
-			System.out.println("Sono prima del save");
 			service.saveOpera(opera,file);
 		}catch(Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Si è riscontrato un errore nel salvataggio dell'opera");
@@ -71,5 +71,26 @@ public class Controller implements ControllerInterface {
 	@Override
 	public ResponseEntity<?> getAllOperaByUserId(@PathVariable("userId")int id) {
 		return ResponseEntity.ok(service.getAllOperaByUserId(id));
+	}
+	//methods for transaction
+	@GetMapping("/nft/transaction/{idHash}")
+	@Override
+	public ResponseEntity<?> getUserIdByOperaId(@PathVariable("idHash") String idHash){
+		TransactionPayload data = new TransactionPayload();
+		Opera temp = service.getOpera(idHash);
+		data.setIdOwner(temp.getUserId());
+		data.setPrice(temp.getPrice()+temp.getCurrency());
+		data.setTokenId(temp.getTokenId());
+		return ResponseEntity.ok().body(data);
+	}
+	@PutMapping("/nft/transaction")
+	@Override
+	public ResponseEntity<?> modifyOwnerByTransactionPayload(@RequestBody TransactionPayload data) {
+		try {
+			service.modifyOwner(data);
+			return ResponseEntity.ok("Proprietario modificato con successo");
+		}catch(Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Errore nella modifica del proprietario");
+		}
 	}
 }

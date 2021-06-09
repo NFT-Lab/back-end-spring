@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import opera.Opera;
+import transaction.TransactionPayload;
 
 public interface ControllerInterface {
 	public ResponseEntity<?> insertOpera(Opera opera, int id, MultipartFile file);
@@ -13,4 +14,7 @@ public interface ControllerInterface {
 	public ResponseEntity<?> getAllCategory();
 	public ResponseEntity<?> getAllOperaByUserId(int id);
 	
+	//methods for transaction
+	public ResponseEntity<?> getUserIdByOperaId(String idHash);
+	public ResponseEntity<?> modifyOwnerByTransactionPayload(TransactionPayload data);
 }

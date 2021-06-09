@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>stage</groupId>
-	<artifactId>NFTService</artifactId>
+	<artifactId>TransactionService</artifactId>
 	<version>0.0.1</version>
-	<name>NFTService</name>
-	<description>NFT service for stage</description>
+	<name>TransactionService</name>
+	<description>Transaction service for stage</description>
 	<properties>
 		<java.version>15</java.version>
 	</properties>
@@ -83,6 +83,7 @@
 	          <artifactId>maven-surefire-plugin</artifactId>
 	          <version>3.0.0-M4</version>
 	          <configuration>
+	          <useSystemClassLoader>false</useSystemClassLoader>
 	            <argLine>${surefireArgLine} --enable-preview -Xmx1024m -noverify</argLine>
 	          </configuration>
 	        </plugin>
@@ -91,3 +92,4 @@
 	</build>
 
 </project>
+

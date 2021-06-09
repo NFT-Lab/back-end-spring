@@ -9,12 +9,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 @Table(name="opera")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Opera {
 	//info to be saved in DB--------------------------------------------
-	@Id @Column(name="Id")
+	@Id @Column(name="Id") //metto io
 	private String id;
 	
 	@Column(name="Title")
@@ -23,8 +25,8 @@ public class Opera {
 	@Column(name="Description")
 	private String description;
 	
-	@Column(name="Author")
-	private String author;
+	@Column(name="Author_Id") //metto io
+	private int authorId;
 	
 	@Column(name="Price")
 	private double price;
@@ -35,18 +37,18 @@ public class Opera {
 	@Column(name="Status")
 	private boolean status;
 
-	@Column(name="Path")
+	@Column(name="Path") //metto io
 	private String path;
 	
 	@Column(name="Type")
 	private EnumType type;
 	
-	@Column(name="User_Id")
+	@Column(name="User_Id") //metto io
 	@JsonProperty( value = "userId", access = JsonProperty.Access.WRITE_ONLY)
 	private int userId;
 	
-	@Column(name="Token_id")
-	@JsonProperty( value = "userId", access = JsonProperty.Access.WRITE_ONLY)
+	@Column(name="Token_id") //metto io
+	@JsonProperty( value = "tokenId", access = JsonProperty.Access.WRITE_ONLY)
 	private BigInteger tokenId;
 	
 	//info to send to front end ---------------------------------------------------------
@@ -86,11 +88,11 @@ public class Opera {
 		this.description = description;
 	}
 	
-	public String getAuthor() {
-		return author;
+	public int getAuthorId() {
+		return authorId;
 	}
-	public void setAuthor(String author) {
-		this.author = author;
+	public void setAuthor(int author) {
+		this.authorId = author;
 	}
 	
 	public double getPrice() {

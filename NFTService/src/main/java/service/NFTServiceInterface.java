@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import opera.Category;
 import opera.Opera;
+import transaction.TransactionPayload;
 
 public interface NFTServiceInterface {
 	public Opera saveOpera(Opera op, MultipartFile file) throws Exception;
@@ -19,4 +20,6 @@ public interface NFTServiceInterface {
 	public List<Opera> getAllOperaByUserId(int id);
 	
 	public boolean checkExistsOpera(String idOpera);
+	
+	public void modifyOwner(TransactionPayload data);
 }
