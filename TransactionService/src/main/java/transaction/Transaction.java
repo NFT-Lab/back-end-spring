@@ -9,6 +9,8 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "transaction")
 @IdClass(TransactionIdKey.class)
@@ -21,10 +23,13 @@ public class Transaction {
 	@Column(name="seller")
 	private int userSeller;
 	@Transient
+	@JsonProperty( value = "tokenId", access = JsonProperty.Access.WRITE_ONLY)
 	private String walletBuyer;
 	@Transient
+	@JsonProperty( value = "tokenId", access = JsonProperty.Access.WRITE_ONLY)
 	private String walletSeller;
 	@Transient
+	@JsonProperty( value = "tokenId", access = JsonProperty.Access.WRITE_ONLY)
 	private BigInteger tokenId;
 	@Column(name="price")
 	private String price;
