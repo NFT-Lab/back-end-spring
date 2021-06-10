@@ -54,7 +54,7 @@ public class UserService implements UserServiceInterface {
 	}
 	@Override
 	public boolean checkWallet(String wallet) {
-		if(wallet.length() != 34 ) {
+		if(wallet.length() != 42 ) {
 			return true;
 		}
 		return false;

@@ -81,6 +81,7 @@ public class Controller implements ControllerInterface {
 		data.setIdOwner(temp.getUserId());
 		data.setPrice(temp.getPrice()+temp.getCurrency());
 		data.setTokenId(temp.getTokenId());
+		System.out.println(temp.getTokenId());
 		return ResponseEntity.ok().body(data);
 	}
 	@PutMapping("/nft/transaction")

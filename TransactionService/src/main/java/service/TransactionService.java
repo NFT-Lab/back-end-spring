@@ -25,37 +25,52 @@ public class TransactionService implements TransactionServiceInterface {
 	private TransactionJpaRepository repo;
 	@Override
 	public void startTransaction(String idHash, int userBuyer) throws Exception{
-		System.out.println("dentro la transaction");
 		Transaction transaction = new Transaction();
 		transaction.setIdHash(idHash);
 		transaction.setUserBuyer(userBuyer);
-		System.out.println("primo template per payload");
 		TransactionPayload data = restTemplate.getForObject("http://nft-service/nft/transaction/" + transaction.getIdHash(), TransactionPayload.class);
+		
 		data.setIdHash(idHash);
 		
+		System.out.println("IDhash "+ data.getIdHash());
+		System.out.println("IdOwner "+ data.getIdOwner());
+		System.out.println("Price "+ data.getPrice());
+		System.out.println("TokenId "+ data.getTokenId());
+		
 		transaction.setUserSeller(data.getIdOwner());
-		System.out.println("secondo template per walletbuyer ");
+		
 		transaction.setWalletBuyer(restTemplate.getForObject("http://user-service/user/transaction/" + transaction.getUserBuyer(), String.class));
-		System.out.println("terzo template per walletseller");
+		
+		System.out.println("Wallet buyer "+ transaction.getWalletBuyer());
+		
 		transaction.setWalletSeller(restTemplate.getForObject("http://user-service/user/transaction/" + data.getIdOwner(), String.class));
 		
+		System.out.println("Wallet Seller "+ transaction.getWalletSeller());
+		
 		transaction.setTokenId(data.getTokenId());
+		
 		transaction.setPrice(data.getPrice());
 		
 		transaction.setTimestamp(new Timestamp(System.currentTimeMillis()).toString());
 		System.out.println("prima del transfer");
-		/*contractService.transfer(transaction.getTokenId(),
-				new UserTuple(transaction.getWalletBuyer(), BigInteger.valueOf(transaction.getUserBuyer())), 
-				new UserTuple(transaction.getWalletSeller(), BigInteger.valueOf(transaction.getUserSeller())), 
-				transaction.getPrice(), 
-				transaction.getTimestamp());*/
+		/*
+		try {
+			contractService.transfer(transaction.getTokenId(),
+					new UserTuple(transaction.getWalletBuyer(), BigInteger.valueOf(transaction.getUserBuyer())), 
+					new UserTuple(transaction.getWalletSeller(), BigInteger.valueOf(transaction.getUserSeller())), 
+					transaction.getPrice(), 
+					transaction.getTimestamp());
+		}catch(Exception e) {
+			e.printStackTrace();
+		}*/
+		
 		System.out.println("dopo il transfer ");
 		data.setIdOwner(userBuyer);
-		System.out.println("ultimo template per modificare l'opera ");
+		
 		restTemplate.put("http://nft-service/nft/transaction/", data);
-		System.out.println("salvo la transazione");
+		
 		repo.save(transaction);
-		System.out.println("fine metodo");
+		
 	}
 	@Override
 	public List<Transaction> getTransactionByIdHash(String idhash) throws Exception{

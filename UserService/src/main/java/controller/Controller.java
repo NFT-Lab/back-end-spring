@@ -41,7 +41,7 @@ public class Controller implements ControllerInterface {
 		if(service.checkEmail(user)) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("L'utente è già presente");
 		}
-		if(service.checkWallet(user.getWallet())) {
+		if(service.checkWallet(user.getWallet()) && user.getWallet()!=null) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Il wallet non è conforme allo standard");
 		}
 		
