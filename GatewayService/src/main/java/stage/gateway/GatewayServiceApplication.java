@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "stage")
-@EnableDiscoveryClient
+//@EnableDiscoveryClient
 public class GatewayServiceApplication {
 
 	public static void main(String[] args) {

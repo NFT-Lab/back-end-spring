@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class RestControllerGateway {
 	@Bean
 	public RouteLocator myRoutes(RouteLocatorBuilder builder) {
+		System.out.println("creo le build");
 	    return builder
 	    		.routes()
-	    		.route("registration_route", r -> r.path("/RegistrationService/**").uri("http://localhost:5071"))
+	    		.route("user_route", r -> r.path("/UserService/**").uri("http://localhost:5072"))
+	    		.route("nft_route", r -> r.path("/NFTService/**").uri("http://localhost:5073"))
+	    		.route("transaction_route", r -> r.path("/TransactionService/**").uri("http://localhost:5074"))
 	    		.build();
 	}
 }

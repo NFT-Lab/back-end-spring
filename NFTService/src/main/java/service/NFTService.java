@@ -71,7 +71,12 @@ public class NFTService implements NFTServiceInterface {
 		
 		//save the file + set path
 		System.out.println("Sono prima della costruzione del file");
-		path = path + fileConstruct.saveFile(file, path, temp.hash());
+		try {
+			path = path + fileConstruct.saveFile(file, path, temp.hash());
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 		System.out.println("Sono dopo la costruzione del file");
 		op.setPath(path);
 		//insert category

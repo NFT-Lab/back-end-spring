@@ -23,6 +23,7 @@ public class TransactionService implements TransactionServiceInterface {
 	private NFTContractService contractService;
 	@Autowired
 	private TransactionJpaRepository repo;
+	
 	@Override
 	public void startTransaction(String idHash, int userBuyer) throws Exception{
 		Transaction transaction = new Transaction();
@@ -53,16 +54,16 @@ public class TransactionService implements TransactionServiceInterface {
 		
 		transaction.setTimestamp(new Timestamp(System.currentTimeMillis()).toString());
 		System.out.println("prima del transfer");
-		/*
+		
 		try {
 			contractService.transfer(transaction.getTokenId(),
-					new UserTuple(transaction.getWalletBuyer(), BigInteger.valueOf(transaction.getUserBuyer())), 
 					new UserTuple(transaction.getWalletSeller(), BigInteger.valueOf(transaction.getUserSeller())), 
+					new UserTuple(transaction.getWalletBuyer(), BigInteger.valueOf(transaction.getUserBuyer())), 
 					transaction.getPrice(), 
 					transaction.getTimestamp());
 		}catch(Exception e) {
 			e.printStackTrace();
-		}*/
+		}
 		
 		System.out.println("dopo il transfer ");
 		data.setIdOwner(userBuyer);
