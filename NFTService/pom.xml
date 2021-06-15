@@ -14,7 +14,7 @@
 	<name>NFTService</name>
 	<description>NFT service for stage</description>
 	<properties>
-		<java.version>15</java.version>
+		<java.version>16</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -43,7 +43,7 @@
 		<dependency>
 			<groupId>io.nfteam.nftlab</groupId>
 			<artifactId>smart-contract-ethereum-web3j-integration</artifactId>
-			<version>1.3</version>
+			<version>1.4</version>
 		</dependency>
 		<dependency>
 		    <groupId>io.github.cdimascio</groupId>

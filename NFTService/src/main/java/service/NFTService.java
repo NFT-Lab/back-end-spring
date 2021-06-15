@@ -51,7 +51,8 @@ public class NFTService implements NFTServiceInterface {
 		//let's add the owner
 		System.out.println("Sono dentro al save");
 		op.setOwner(user.getOwner());
-		op.setAuthor(op.getUserId());
+		op.setAuthor(user.getName()+user.getSurname());
+		op.setAuthorId(op.getUserId());
 
 		String path = "gallery/" + op.getType().toString();
 		//generate hashId with nftlab library
@@ -95,7 +96,8 @@ public class NFTService implements NFTServiceInterface {
 		if(op.getDescription().isBlank())
 			op.setDescription(temp.getDescription());
 		op.setPath(temp.getPath());
-		op.setAuthor(temp.getAuthorId());
+		op.setAuthorId(temp.getAuthorId());
+		op.setAuthor(temp.getAuthor());
 		op.setTokenId(temp.getTokenId());
 		op.setUserId(temp.getUserId());
 		
@@ -175,7 +177,7 @@ public class NFTService implements NFTServiceInterface {
 		}
 	}
 	private UserServiceResponse getUser(Opera op) {
-		UserServiceResponse user = restTemplate.getForObject("http://user-service/nftUser/" + op.getUserId(), UserServiceResponse.class);
+		UserServiceResponse user = restTemplate.getForObject("http://user-service/UserService/nftUser/" + op.getUserId(), UserServiceResponse.class);
 		return user;
 	}
 	

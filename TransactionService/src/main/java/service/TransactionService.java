@@ -29,7 +29,7 @@ public class TransactionService implements TransactionServiceInterface {
 		Transaction transaction = new Transaction();
 		transaction.setIdHash(idHash);
 		transaction.setUserBuyer(userBuyer);
-		TransactionPayload data = restTemplate.getForObject("http://nft-service/nft/transaction/" + transaction.getIdHash(), TransactionPayload.class);
+		TransactionPayload data = restTemplate.getForObject("http://nft-service/NFTService/nft/transaction/" + transaction.getIdHash(), TransactionPayload.class);
 		
 		data.setIdHash(idHash);
 		
@@ -40,11 +40,11 @@ public class TransactionService implements TransactionServiceInterface {
 		
 		transaction.setUserSeller(data.getIdOwner());
 		
-		transaction.setWalletBuyer(restTemplate.getForObject("http://user-service/user/transaction/" + transaction.getUserBuyer(), String.class));
+		transaction.setWalletBuyer(restTemplate.getForObject("http://user-service/UserService/user/transaction/" + transaction.getUserBuyer(), String.class));
 		
 		System.out.println("Wallet buyer "+ transaction.getWalletBuyer());
 		
-		transaction.setWalletSeller(restTemplate.getForObject("http://user-service/user/transaction/" + data.getIdOwner(), String.class));
+		transaction.setWalletSeller(restTemplate.getForObject("http://user-service/UserService/user/transaction/" + data.getIdOwner(), String.class));
 		
 		System.out.println("Wallet Seller "+ transaction.getWalletSeller());
 		
@@ -68,7 +68,7 @@ public class TransactionService implements TransactionServiceInterface {
 		System.out.println("dopo il transfer ");
 		data.setIdOwner(userBuyer);
 		
-		restTemplate.put("http://nft-service/nft/transaction/", data);
+		restTemplate.put("http://nft-service/NFTService/nft/transaction/", data);
 		
 		repo.save(transaction);
 		

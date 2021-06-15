@@ -5,6 +5,9 @@ import java.math.BigInteger;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+//import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+//import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.web.client.RestTemplate;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
@@ -20,8 +23,16 @@ import io.nfteam.nftlab.services.ipfs.IPFSPinataService;
 import io.nfteam.nftlab.services.ipfs.IPFSService;
 
 @Configuration
-public class WebConfiguration {
-
+//@EnableResourceServer
+public class ServerConfiguration /*extends ResourceServerConfigurerAdapter*/{
+/*
+	@Override
+    public void configure(HttpSecurity http) throws Exception {         
+        http
+            .cors().and()
+            .csrf().disable()
+            .authorizeRequests().antMatchers("/**").permitAll();
+    }*/
     @Bean @LoadBalanced
     public RestTemplate getRestTemplate() {
         return new RestTemplate();
