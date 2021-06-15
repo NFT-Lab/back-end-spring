@@ -7,7 +7,7 @@ import opera.Opera;
 import transaction.TransactionPayload;
 
 public interface ControllerInterface {
-	public ResponseEntity<?> insertOpera(Opera opera, int id, MultipartFile file);
+	public ResponseEntity<?> insertOpera(String opera, int id, MultipartFile file);
 	public ResponseEntity<?> modifyOpera(Opera opera, int id);
 	
 	public ResponseEntity<?> getAllOpera();

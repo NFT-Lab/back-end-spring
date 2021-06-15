@@ -56,24 +56,26 @@ public class NFTService implements NFTServiceInterface {
 
 		String path = "gallery/" + op.getType().toString();
 		//generate hashId with nftlab library
-		System.out.println("wallet" + user.getWallet());
-		System.out.println("id" + op.getUserId());
+		System.out.println("wallet: " + user.getWallet());
+		System.out.println("id: " + op.getUserId());
+		System.out.println("File: " + file.getOriginalFilename());
 		ByteArrayResource arrayFile = fileConstruct.ConstructFile(file);
 		
 		
 		System.out.println("Sono prima del mint");
-		NFTID temp = contractService.mint(new UserTuple(user.getWallet(),BigInteger.valueOf(op.getUserId())) , arrayFile);
+		//NFTID temp = contractService.mint(new UserTuple(user.getWallet(),BigInteger.valueOf(op.getUserId())) , arrayFile);
 		
 		
 		
 		System.out.println("Sono dopo il mint");
-		op.setId(temp.hash());
-		op.setTokenId(temp.tokenId());
-		
+		//op.setId(temp.hash());
+		//op.setTokenId(temp.tokenId());
+		op.setId("test");
+		op.setTokenId(BigInteger.valueOf(999));
 		//save the file + set path
 		System.out.println("Sono prima della costruzione del file");
 		try {
-			path = path + fileConstruct.saveFile(file, path, temp.hash());
+			path = path + fileConstruct.saveFile(file, path, "test");
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -81,9 +83,10 @@ public class NFTService implements NFTServiceInterface {
 		System.out.println("Sono dopo la costruzione del file");
 		op.setPath(path);
 		//insert category
-		this.insertCategory(op);
-		System.out.println("Ho quasi finito");
 		repoNFT.save(op);
+		System.out.println("Ho quasi finito");
+		this.insertCategory(op);
+		
 		return op;
 	}
 	@Transactional
@@ -104,7 +107,7 @@ public class NFTService implements NFTServiceInterface {
 		
 		op = repoNFT.save(op);
 		
-		repoOpeCat.deleteAllByIdOpera(op.getId());
+		repoOpeCat.deleteAllByOpera(op.getId());
 		
 		this.insertCategory(op);
 		
@@ -116,14 +119,14 @@ public class NFTService implements NFTServiceInterface {
 		List<Opera> listOpera = repoNFT.findAll();
 		int i = 0;
 		while( i < listOpera.size() ) {
-			List<OperaCategory> listOpCat = repoOpeCat.findAllByIdOpera(listOpera.get(i).getId());
+			List<OperaCategory> listOpCat = repoOpeCat.findAllByOpera(listOpera.get(i).getId());
 			int j = 0;
 			List<Category> tempListCat = new ArrayList<Category>();
 			while(j < listOpCat.size()) {
 				tempListCat.add(repoCategory.findById(listOpCat.get(j).getIdCategory()).get());
 				j++;
 			}
-			listOpera.get(i).setCategory(tempListCat);
+			listOpera.get(i).setCategories(tempListCat);
 			i++;
 		}
 		return listOpera;
@@ -131,14 +134,15 @@ public class NFTService implements NFTServiceInterface {
 	@Override
 	public Opera getOpera(String str) {
 		Opera opera = repoNFT.getById(str);
-		List<OperaCategory> listOpCat = repoOpeCat.findAllByIdOpera(opera.getId());
+		//inserire anche l'autore e l'owner
+		List<OperaCategory> listOpCat = repoOpeCat.findAllByOpera(opera.getId());
 		int j = 0;
 		List<Category> tempListCat = new ArrayList<Category>();
 		while(j < listOpCat.size()) {
 			tempListCat.add(repoCategory.findById(listOpCat.get(j).getIdCategory()).get());
 			j++;
 		}
-		opera.setCategory(tempListCat);
+		opera.setCategories(tempListCat);
 		return opera;
 	}
 	@Override
@@ -148,7 +152,7 @@ public class NFTService implements NFTServiceInterface {
 	@Override
 	public List<Opera> getAllOperaByUserId(int id) {
 		List<Opera> listOpera = repoNFT.findAllByUserId(id);
-		System.out.println(listOpera.get(0));
+		
 		int i = 0;
 		while(i < listOpera.size()) {
 			listOpera.set(i, this.getOpera(listOpera.get(i).getId()));
@@ -169,9 +173,12 @@ public class NFTService implements NFTServiceInterface {
 	//methods for the class
 	private void insertCategory(Opera op) {
 		int i = 0;
-		if(op.getCategory() != null) {
-			while(i < op.getCategory().size()) {
-				repoOpeCat.save(new OperaCategory(op.getId(), op.getCategory().get(i).getId()));
+		if(op.getCategories() != null) {
+			while(i < op.getCategories().size()) {
+				System.out.println("Counter i: "+i);
+				System.out.println("Opera id: "+op.getId());
+				System.out.println("Category id: "+op.getCategories().get(i).getId());
+				repoOpeCat.save(new OperaCategory(op.getId(), op.getCategories().get(i).getId()));
 				i++;
 			}
 		}

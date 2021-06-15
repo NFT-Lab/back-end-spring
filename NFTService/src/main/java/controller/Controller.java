@@ -1,5 +1,6 @@
 package controller;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,16 +13,19 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import opera.Opera;
 import service.NFTService;
 import transaction.TransactionPayload;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
+//@CrossOrigin(origins = "http://localhost:8080", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
 @RequestMapping("/NFTService")
 public class Controller implements ControllerInterface {
 	
@@ -31,15 +35,22 @@ public class Controller implements ControllerInterface {
 	public Controller(NFTService service) {
 		this.service = service;
 	}
-	
+
 	@PostMapping(value = "/nft/user/{userId}", consumes = {MediaType.APPLICATION_OCTET_STREAM_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
 	@Override
-	public ResponseEntity<?> insertOpera(@RequestPart("opera") Opera opera, @PathVariable("userId")int id, @RequestPart("file")MultipartFile file) {
+	public ResponseEntity<?> insertOpera(@RequestParam("opera") String opera, @PathVariable("userId")int id, @RequestPart("file")MultipartFile file) {
 		System.out.println(opera);
-		
+		Opera operaFromJson = new Opera();
+
 		try {
-			opera.setUserId(id);
-			service.saveOpera(opera,file);
+		    ObjectMapper objMap = new ObjectMapper();
+		    operaFromJson = objMap.readValue(opera, Opera.class);
+		} catch (Exception e) {
+		    System.out.println(e.getMessage());
+		}
+		try {
+			operaFromJson.setUserId(id);
+			service.saveOpera(operaFromJson,file);
 		}catch(Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Si è riscontrato un errore nel salvataggio dell'opera");
 		}
@@ -49,9 +60,9 @@ public class Controller implements ControllerInterface {
 	@PutMapping("/nft/user/{userId}")
 	@Override
 	public ResponseEntity<?> modifyOpera(@RequestBody Opera opera, @PathVariable("userId")int id) {
-		if(opera.getUserId() != id) {
+		/*if(opera.getUserId() != id) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("L'opera non corrisponde all'utente");
-		}
+		}*/ //da controllare
 		if(!(service.checkExistsOpera(opera.getId()))) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Opera non trovata");
 		}

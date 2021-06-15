@@ -5,7 +5,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class OpCatId implements Serializable{
 	@SuppressWarnings("unused")
-	private String idOpera;
+	private String opera;
 	@SuppressWarnings("unused")
-	private int idCategory;
+	private int cat;
 }

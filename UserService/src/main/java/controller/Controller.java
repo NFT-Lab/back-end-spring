@@ -19,7 +19,7 @@ import user.User;
 import user.UserPayload;
 
 @RestController
-@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
+//@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
 @RequestMapping("/UserService")
 public class Controller implements ControllerInterface {
 
@@ -87,8 +87,10 @@ public class Controller implements ControllerInterface {
 		if(service.checkEmail(user) && service.checkId(id)) {
 			User tempUser;
 			try {
+				user.setId(id);
 				tempUser = service.updateUserData(user);
 			}catch(Exception e){ //placeholder per prendere l'eccezione se il salvataggio dello user non va a buon fine
+				e.printStackTrace();
 				return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
 			}
 			return ResponseEntity.ok().body(tempUser);

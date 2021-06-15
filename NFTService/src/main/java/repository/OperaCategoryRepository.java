@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import opera.OperaCategory;
 @Repository
 public interface OperaCategoryRepository extends JpaRepository<OperaCategory, Integer>{
-	public List<OperaCategory> findAllByIdOpera(String idOpera);
-	public void deleteAllByIdOpera(String idOpera);
+	public List<OperaCategory> findAllByOpera(String idOpera);
+	public void deleteAllByOpera(String idOpera);
 }

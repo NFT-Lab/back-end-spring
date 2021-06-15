@@ -13,7 +13,7 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 
 import reactor.core.publisher.Mono;
-/*
+
 @Configuration
 public class ServerConfig {
 
@@ -42,4 +42,4 @@ public class ServerConfig {
     };
   }
 
-}*/
+}

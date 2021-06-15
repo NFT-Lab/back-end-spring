@@ -57,7 +57,7 @@ public class Opera {
 	@Transient
 	private String author;
 	@Transient
-	private List<Category> listCategory;
+	private List<Category> categories;
 
 	//constructor -----------------------------------------------------------------------
 	public Opera(){};
@@ -147,11 +147,11 @@ public class Opera {
 	public void setOwner(String owner) {
 		this.owner = owner;
 	}
-	public List<Category> getCategory(){
-		return listCategory;
+	public List<Category> getCategories(){
+		return categories;
 	}
-	public void setCategory(List<Category> listCategory) {
-		this.listCategory = listCategory;
+	public void setCategories(List<Category> listCategory) {
+		this.categories = listCategory;
 	}
 	public BigInteger getTokenId() {
 		return tokenId;

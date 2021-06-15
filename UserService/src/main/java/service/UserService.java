@@ -17,6 +17,7 @@ public class UserService implements UserServiceInterface {
 	@Override
 	public User addUser(User user) throws Exception {
 		user.setPassword(Integer.toString(user.getPassword().hashCode()));
+		System.out.println("Hash Password: " + user.getPassword());
 		User userData = repo.save(user);
 		userData.setId(repo.findUsersByEmail(user.getEmail()).getId());
 		return userData;
@@ -29,8 +30,9 @@ public class UserService implements UserServiceInterface {
 	}
 	@Override
 	public User updateUserData(User user) throws Exception {
+		System.out.println("User_id: " + user.getId());
 		user.setId(repo.findUsersByEmail(user.getEmail()).getId());
-		user.setPassword(repo.getById(user.getId()).getPassword());
+		//user.setPassword(repo.getById(user.getId()).getPassword());
 		return this.addUser(user);
 	}
 	@Override

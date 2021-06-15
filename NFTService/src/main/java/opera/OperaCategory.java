@@ -12,29 +12,29 @@ import javax.persistence.Table;
 public class OperaCategory {
 	
 	
-	@Id @Column(name="Id_Opera")
-	private String idOpera;
-	@Id @Column(name="Id_Cat")
-	private int idCategory;
+	@Id @Column(name="opera")
+	private String opera;
+	@Id @Column(name="cat")
+	private int cat;
 	
 	public OperaCategory() {}
 	
 	public OperaCategory(String idOpera, int idCategory) {
-		this.idOpera = idOpera;
-		this.idCategory = idCategory;
+		this.opera = idOpera;
+		this.cat = idCategory;
 	}
 	
 	public String getIdOpera() {
-		return idOpera;
+		return opera;
 	}
 	public void setIdOpera(String idOpera) {
-		this.idOpera = idOpera;
+		this.opera = idOpera;
 	}
 	public int getIdCategory() {
-		return idCategory;
+		return cat;
 	}
 	public void setIdCategory(int idCategory) {
-		this.idCategory = idCategory;
+		this.cat = idCategory;
 	}
 	
 }
