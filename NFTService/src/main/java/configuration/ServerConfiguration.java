@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 //import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 //import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
@@ -23,16 +25,16 @@ import io.nfteam.nftlab.services.ipfs.IPFSPinataService;
 import io.nfteam.nftlab.services.ipfs.IPFSService;
 
 @Configuration
-//@EnableResourceServer
-public class ServerConfiguration /*extends ResourceServerConfigurerAdapter*/{
-/*
-	@Override
-    public void configure(HttpSecurity http) throws Exception {         
-        http
-            .cors().and()
-            .csrf().disable()
-            .authorizeRequests().antMatchers("/**").permitAll();
-    }*/
+public class ServerConfiguration extends WebMvcConfigurationSupport{
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry){ 
+            registry.addResourceHandler("/**")
+                 .addResourceLocations("classpath:/static/");
+            super.addResourceHandlers(registry);
+            
+    }
+
     @Bean @LoadBalanced
     public RestTemplate getRestTemplate() {
         return new RestTemplate();

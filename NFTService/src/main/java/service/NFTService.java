@@ -3,6 +3,8 @@ package service;
 import io.nfteam.nftlab.services.*;
 import io.nfteam.nftlab.services.smartcontract.*;
 import java.math.BigInteger;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,8 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,14 +51,14 @@ public class NFTService implements NFTServiceInterface {
 	@Override
 	public Opera saveOpera(Opera op, MultipartFile file) throws Exception {
 		//let's search for the name and surname of the owner id
-		UserServiceResponse user = this.getUser(op);
+		UserServiceResponse user = this.getUser(op.getUserId());
 		//let's add the owner
 		System.out.println("Sono dentro al save");
-		op.setOwner(user.getOwner());
-		op.setAuthor(user.getName()+user.getSurname());
+		op.setOwner(user.getNameSurname());
+		op.setAuthor(user.getName() + " " + user.getSurname());
 		op.setAuthorId(op.getUserId());
 
-		String path = "gallery/" + op.getType().toString();
+		String path = "gallery/" + op.getType().toString() + "/";
 		//generate hashId with nftlab library
 		System.out.println("wallet: " + user.getWallet());
 		System.out.println("id: " + op.getUserId());
@@ -63,25 +67,24 @@ public class NFTService implements NFTServiceInterface {
 		
 		
 		System.out.println("Sono prima del mint");
-		//NFTID temp = contractService.mint(new UserTuple(user.getWallet(),BigInteger.valueOf(op.getUserId())) , arrayFile);
+		NFTID temp = contractService.mint(new UserTuple(user.getWallet(),BigInteger.valueOf(op.getUserId())) , arrayFile);
 		
 		
 		
 		System.out.println("Sono dopo il mint");
-		//op.setId(temp.hash());
-		//op.setTokenId(temp.tokenId());
-		op.setId("test");
-		op.setTokenId(BigInteger.valueOf(999));
+		op.setId(temp.hash());
+		op.setTokenId(temp.tokenId());
+
 		//save the file + set path
 		System.out.println("Sono prima della costruzione del file");
 		try {
-			path = path + fileConstruct.saveFile(file, path, "test");
+			path = path + fileConstruct.saveFile(file, path, temp.hash());
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		
 		System.out.println("Sono dopo la costruzione del file");
-		op.setPath(path);
+		op.setPath(path); //sistema il path fa schifo per ora ritorna soltanto gallery/img che non vuol dire nulla
 		//insert category
 		repoNFT.save(op);
 		System.out.println("Ho quasi finito");
@@ -111,7 +114,7 @@ public class NFTService implements NFTServiceInterface {
 		
 		this.insertCategory(op);
 		
-		op.setOwner(this.getUser(op).getOwner());
+		op.setOwner(this.getUser(op.getUserId()).getNameSurname());
 		return op;
 	}
 	@Override
@@ -126,6 +129,11 @@ public class NFTService implements NFTServiceInterface {
 				tempListCat.add(repoCategory.findById(listOpCat.get(j).getIdCategory()).get());
 				j++;
 			}
+			UserServiceResponse userAuthor = this.getUser(listOpera.get(i).getAuthorId());
+			listOpera.get(i).setAuthor(userAuthor.getNameSurname());
+			UserServiceResponse userOwner = this.getUser(listOpera.get(i).getUserId());
+			listOpera.get(i).setAuthor(userOwner.getNameSurname());
+			
 			listOpera.get(i).setCategories(tempListCat);
 			i++;
 		}
@@ -152,10 +160,22 @@ public class NFTService implements NFTServiceInterface {
 	@Override
 	public List<Opera> getAllOperaByUserId(int id) {
 		List<Opera> listOpera = repoNFT.findAllByUserId(id);
-		
+		System.out.println("Lunghezza lista: " + listOpera.size());
 		int i = 0;
 		while(i < listOpera.size()) {
-			listOpera.set(i, this.getOpera(listOpera.get(i).getId()));
+			List<OperaCategory> listOpCat = repoOpeCat.findAllByOpera(listOpera.get(i).getId());
+			int j = 0;
+			List<Category> tempListCat = new ArrayList<Category>();
+			while(j < listOpCat.size()) {
+				tempListCat.add(repoCategory.findById(listOpCat.get(j).getIdCategory()).get());
+				j++;
+			}
+			UserServiceResponse userAuthor = this.getUser(listOpera.get(i).getAuthorId());
+			listOpera.get(i).setAuthor(userAuthor.getNameSurname());
+			UserServiceResponse userOwner = this.getUser(listOpera.get(i).getUserId());
+			listOpera.get(i).setAuthor(userOwner.getNameSurname());
+			
+			listOpera.get(i).setCategories(tempListCat);
 			i++;
 		}
 		return listOpera;
@@ -170,6 +190,23 @@ public class NFTService implements NFTServiceInterface {
 		temp.setUserId(data.getIdOwner());
 		repoNFT.save(temp);
 		}
+	
+	public Resource load(String filename) {
+        try {
+            Path file = Paths.get("gallery/img/")
+                             .resolve(filename);
+            Resource resource = new UrlResource(file.toUri());
+
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+        	e.printStackTrace();
+            return null;
+        }
+    }
 	//methods for the class
 	private void insertCategory(Opera op) {
 		int i = 0;
@@ -183,8 +220,8 @@ public class NFTService implements NFTServiceInterface {
 			}
 		}
 	}
-	private UserServiceResponse getUser(Opera op) {
-		UserServiceResponse user = restTemplate.getForObject("http://user-service/UserService/nftUser/" + op.getUserId(), UserServiceResponse.class);
+	private UserServiceResponse getUser(int id) {
+		UserServiceResponse user = restTemplate.getForObject("http://user-service/UserService/nftUser/" + id, UserServiceResponse.class);
 		return user;
 	}
 	

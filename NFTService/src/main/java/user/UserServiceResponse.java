@@ -50,7 +50,7 @@ public class UserServiceResponse {
 		this.wallet = wallet;
 	}
 	//methods for owner
-	public String getOwner() {
+	public String getNameSurname() {
 		return this.name +" "+ this.surname;
 	}
 }

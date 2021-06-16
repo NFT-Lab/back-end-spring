@@ -51,7 +51,9 @@ public class UserService implements UserServiceInterface {
 	@Override
 	public boolean checkEmailPassword(User user) {
 		user.setPassword(Integer.toString(user.getPassword().hashCode()));
-		return repo.existsUsersByEmailAndPassword(user.getEmail(), user.getPassword());
+		boolean temp = repo.existsUsersByEmailAndPassword(user.getEmail(), user.getPassword());
+		System.out.println("Esiste??? "+temp);
+		return temp;
 	}
 	@Override
 	public boolean checkId(int id) {

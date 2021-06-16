@@ -2,6 +2,8 @@ package controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -50,11 +52,11 @@ public class Controller implements ControllerInterface {
 		}
 		try {
 			operaFromJson.setUserId(id);
-			service.saveOpera(operaFromJson,file);
+			operaFromJson = service.saveOpera(operaFromJson,file);
 		}catch(Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Si è riscontrato un errore nel salvataggio dell'opera");
 		}
-		return ResponseEntity.status(HttpStatus.CREATED).body(opera);
+		return ResponseEntity.status(HttpStatus.CREATED).body(operaFromJson);
 	}
 	
 	@PutMapping("/nft/user/{userId}")
@@ -89,6 +91,16 @@ public class Controller implements ControllerInterface {
 	public ResponseEntity<?> getAllOperaByUserId(@PathVariable("userId")int id) {
 		return ResponseEntity.ok(service.getAllOperaByUserId(id));
 	}
+	//url Back-end local..8765/NFTServi
+	@GetMapping("/gallery/{filename:.+}")
+	public ResponseEntity<?> getFileOpera(@PathVariable String filename){
+		Resource file = service.load(filename);
+		System.out.println("Ho recuperato il file tra poco lo invio");
+		return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                .body(file);
+	}
+	
 	//methods for transaction
 	@GetMapping("/nft/transaction/{idHash}")
 	@Override
