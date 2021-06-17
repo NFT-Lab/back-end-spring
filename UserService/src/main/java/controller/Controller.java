@@ -39,7 +39,7 @@ public class Controller implements ControllerInterface {
 		if(service.checkEmailPassword(user)) {
 			return ResponseEntity.ok().body(service.getUserByEmail(user));
 		}
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("L'utente non esiste");
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utente non esiste");
 	}
 	@PostMapping("/signup")
 	@Override
@@ -95,7 +95,7 @@ public class Controller implements ControllerInterface {
 			}
 			return ResponseEntity.ok().body(tempUser);
 		}
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 	
 	//methods for NFTService -------------------------------------------------------------------------
