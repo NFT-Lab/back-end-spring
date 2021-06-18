@@ -32,7 +32,6 @@ public class UserService implements UserServiceInterface {
 	public User updateUserData(User user) throws Exception {
 		System.out.println("User_id: " + user.getId());
 		user.setId(repo.findUsersByEmail(user.getEmail()).getId());
-		//user.setPassword(repo.getById(user.getId()).getPassword());
 		return this.addUser(user);
 	}
 	@Override

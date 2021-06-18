@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 //class for construction of file
 public class FileConstruction {
 
-	public ByteArrayResource ConstructFile(MultipartFile file) throws IOException {
+	public ByteArrayResource constructFile(MultipartFile file) throws IOException {
 		System.out.println("Sono prima della costruzione");
 		ByteArrayResource contentsAsResource = new ByteArrayResource(file.getBytes()) {
 	        @Override

@@ -14,7 +14,7 @@
 	<name>TransactionService</name>
 	<description>Transaction service for stage</description>
 	<properties>
-		<java.version>15</java.version>
+		<java.version>16</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -84,7 +84,7 @@
 	          <version>3.0.0-M4</version>
 	          <configuration>
 	          <useSystemClassLoader>false</useSystemClassLoader>
-	            <argLine>${surefireArgLine} --enable-preview -Xmx1024m -noverify</argLine>
+	            <argLine>--enable-preview </argLine>
 	          </configuration>
 	        </plugin>
 	      </plugins>

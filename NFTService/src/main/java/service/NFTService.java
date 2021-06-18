@@ -39,42 +39,33 @@ public class NFTService implements NFTServiceInterface {
 	private NFTContractService contractService;
 	private FileConstruction fileConstruct = new FileConstruction();
 	
-	@Autowired
 	private RestTemplate restTemplate;
 	
 	@Autowired
-	public NFTService(NFTJpaRepository repoNFT, CategoryJpaRepository repoCat, OperaCategoryRepository repoOpeCat, NFTContractService contractService) {
+	public NFTService(NFTJpaRepository repoNFT, CategoryJpaRepository repoCat, OperaCategoryRepository repoOpeCat, NFTContractService contractService, RestTemplate restTemplate) {
 		this.repoNFT = repoNFT;
 		this.repoCategory = repoCat;
 		this.repoOpeCat = repoOpeCat;
 		this.contractService = contractService;
+		this.restTemplate = restTemplate;
 	}
 	@Override
 	public Opera saveOpera(Opera op, MultipartFile file) throws Exception {
 		//let's search for the name and surname of the owner id
 		UserServiceResponse user = this.getUser(op.getUserId());
 		//let's add the owner
-		System.out.println("Sono dentro al save");
 		op.setOwner(user.getNameSurname());
 		
-		System.out.println("Surn: "+ user.getNameSurname());
 		op.setAuthor(user.getNameSurname());
 		
-		System.out.println("Author: "+ user.getNameSurname());
 		op.setAuthorId(op.getUserId());
 		
-		System.out.println("user id: "+ op.getUserId());
 		if(op.getType() == null)
 			op.setType(EnumType.img);
 		String path = "gallery/" + op.getType().toString() + "/";
-		//generate hashId with nftlab library
-		System.out.println("wallet: " + user.getWallet());
-		System.out.println("id: " + op.getUserId());
-		System.out.println("File: " + file.getOriginalFilename());
-		ByteArrayResource arrayFile = fileConstruct.ConstructFile(file);
+
+		ByteArrayResource arrayFile = fileConstruct.constructFile(file);
 		
-		
-		System.out.println("Sono prima del mint");
 		NFTID temp;
 		try {
 			temp = contractService.mint(new UserTuple(user.getWallet(),BigInteger.valueOf(op.getUserId())) , arrayFile);	
@@ -83,24 +74,21 @@ public class NFTService implements NFTServiceInterface {
 			throw e;
 		}
 
-		System.out.println("Sono dopo il mint");
 		op.setId(temp.hash());
 		op.setTokenId(temp.tokenId());
 
 		//save the file + set path
-		System.out.println("Sono prima della costruzione del file");
 		try {
-			path = path + fileConstruct.saveFile(file, path, temp.hash());
+			path = fileConstruct.saveFile(file, path, temp.hash());
 		}catch(Exception e){
 			e.printStackTrace();
 			throw e;
 		}
 		
-		System.out.println("Sono dopo la costruzione del file");
 		op.setPath(path); //sistema il path fa schifo per ora ritorna soltanto gallery/img che non vuol dire nulla
 		//insert category
 		repoNFT.save(op);
-		System.out.println("Ho quasi finito");
+
 		this.insertCategory(op);
 		
 		return op;
@@ -237,7 +225,7 @@ public class NFTService implements NFTServiceInterface {
 			}
 		}
 	}
-	private UserServiceResponse getUser(int id) {
+	public UserServiceResponse getUser(int id) {
 		UserServiceResponse user = restTemplate.getForObject("http://user-service/UserService/nftUser/" + id, UserServiceResponse.class);
 		return user;
 	}

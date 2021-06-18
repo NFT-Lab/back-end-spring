@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,8 +22,8 @@ import user.User;
 class UserServiceApplicationTests {
 	
 	private UserService service;
-	
-	private JPAUserRepository repo = Mockito.mock(JPAUserRepository.class);
+	@Mock
+	private JPAUserRepository repo;
 	
 	private User user;
 
@@ -57,7 +58,7 @@ class UserServiceApplicationTests {
 		
 		assertEquals(expectedUser.getPassword(), actualUser.getPassword());
 	}
- 
+	@Test
 	void updateUserDataTest() throws Exception {
 		when(repo.save(any(User.class))).thenReturn(user);
 		
@@ -65,4 +66,5 @@ class UserServiceApplicationTests {
 		
 		assertThat(service.updateUserData(user)).isNotNull();
 	}
+	
 }

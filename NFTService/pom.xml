@@ -88,7 +88,7 @@
 	          <artifactId>maven-surefire-plugin</artifactId>
 	          <version>3.0.0-M4</version>
 	          <configuration>
-	            <argLine>${surefireArgLine} --enable-preview -Xmx1024m -noverify</argLine>
+	            <argLine>--enable-preview </argLine>
 	          </configuration>
 	        </plugin>
 	      </plugins>

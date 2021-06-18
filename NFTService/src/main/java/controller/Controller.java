@@ -62,9 +62,6 @@ public class Controller implements ControllerInterface {
 	@PutMapping("/nft/user/{userId}")
 	@Override
 	public ResponseEntity<?> modifyOpera(@RequestBody Opera opera, @PathVariable("userId")int id) {
-		/*if(opera.getUserId() != id) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("L'opera non corrisponde all'utente");
-		}*/ //da controllare
 		if(!(service.checkExistsOpera(opera.getId()))) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Opera non trovata");
 		}
