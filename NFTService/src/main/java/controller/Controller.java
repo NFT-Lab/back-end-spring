@@ -88,7 +88,7 @@ public class Controller implements ControllerInterface {
 	public ResponseEntity<?> getAllOperaByUserId(@PathVariable("userId")int id) {
 		return ResponseEntity.ok(service.getAllOperaByUserId(id));
 	}
-	//url Back-end local..8765/NFTServi
+	
 	@GetMapping("/gallery/{filename:.+}")
 	public ResponseEntity<?> getFileOpera(@PathVariable String filename){
 		Resource file = service.load(filename);
