@@ -17,12 +17,17 @@ import transaction.TransactionPayload;
 @Service
 public class TransactionService implements TransactionServiceInterface {
 
-	@Autowired
 	private RestTemplate restTemplate;
-	@Autowired
+	
 	private NFTContractService contractService;
-	@Autowired
+	
 	private TransactionJpaRepository repo;
+	@Autowired
+	public TransactionService(RestTemplate restTemplate, NFTContractService contractService, TransactionJpaRepository repo) {
+		this.restTemplate = restTemplate;
+		this.contractService = contractService;
+		this.repo = repo;
+	}
 	
 	@Override
 	public void startTransaction(String idHash, int userBuyer) throws Exception{

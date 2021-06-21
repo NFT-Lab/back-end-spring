@@ -3,10 +3,23 @@ package transaction;
 import java.math.BigInteger;
 
 public class TransactionPayload {
+	
 	private int idOwner;
 	private String price;
 	private BigInteger tokenId;
 	private String idHash;
+	
+	public TransactionPayload() {
+		
+	}
+	
+	public TransactionPayload(int idOwner, String price, BigInteger tokenId, String idHash) {
+		super();
+		this.idOwner = idOwner;
+		this.price = price;
+		this.tokenId = tokenId;
+		this.idHash = idHash;
+	}
 	
 	public int getIdOwner() {
 		return idOwner;
