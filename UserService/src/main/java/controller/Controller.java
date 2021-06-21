@@ -105,7 +105,7 @@ public class Controller implements ControllerInterface {
 		NFTUserRequest user = new NFTUserRequest(service.getUserById(id));
 		return ResponseEntity.ok().body(user);
 	}
-	@GetMapping("user/transaction/{id}")
+	@GetMapping("/user/transaction/{id}")
 	@Override
 	public ResponseEntity<?> getUserWalletById(@PathVariable("id") int id){
 		return ResponseEntity.ok().body(service.getUserById(id).getWallet());
