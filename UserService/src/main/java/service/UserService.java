@@ -13,24 +13,26 @@ public class UserService implements UserServiceInterface {
 	public UserService(JPAUserRepository repo) {
 		this.repo = repo;
 	}
-	//operation method --------------------------------------------------------
+	//operation method for users --------------------------------------------------------
+	
+	//method to Add new user into the database
 	@Override
 	public User addUser(User user) throws Exception {
 		user.setPassword(Integer.toString(user.getPassword().hashCode()));
-		System.out.println("Hash Password: " + user.getPassword());
 		User userData = repo.save(user);
 		userData.setId(repo.findUsersByEmail(user.getEmail()).getId());
 		return userData;
 	}
+	//method to Update old password of user with a newer password
 	@Override
 	public User updateUserPassword(User user, String newPassword) throws Exception {
 		user = repo.findUsersByEmail(user.getEmail());
 		user.setPassword(newPassword);
 		return this.addUser(user);
 	}
+	//method to update user data into to the database
 	@Override
 	public User updateUserData(User user) throws Exception {
-		System.out.println("User_id: " + user.getId());
 		user.setId(repo.findUsersByEmail(user.getEmail()).getId());
 		return this.addUser(user);
 	}
@@ -51,7 +53,6 @@ public class UserService implements UserServiceInterface {
 	public boolean checkEmailPassword(User user) {
 		user.setPassword(Integer.toString(user.getPassword().hashCode()));
 		boolean temp = repo.existsUsersByEmailAndPassword(user.getEmail(), user.getPassword());
-		System.out.println("Esiste??? "+temp);
 		return temp;
 	}
 	@Override

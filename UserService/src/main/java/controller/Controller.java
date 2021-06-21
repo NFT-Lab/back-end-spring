@@ -30,6 +30,11 @@ public class Controller implements ControllerInterface {
 	}
 	
 	//methods login/signUp -----------------------------------------------------------------------
+	/*methods for login -> response:
+		- Correct finding of user = HttpStatus.OK + user data
+		- Incorrect value request = HttpStatus.badRequest + error message
+		- Incorrect email/password = HttpStatus.notFound + error message
+	*/
 	@PostMapping("/login")
 	@Override
 	public ResponseEntity<?> login(@RequestBody User user){
@@ -41,6 +46,12 @@ public class Controller implements ControllerInterface {
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utente non esiste");
 	}
+	/*methods for signup -> response:
+		- Correct insertion of new user = HttpStatus.created + user data
+		- User already in the database = HttpStatus.conflict + error message
+		- Incorrect value of wallet = HttpStatus.conflict + error message
+		- Error insertion of new user = HttpStatus.internalServerError + error message
+	 */
 	@PostMapping("/signup")
 	@Override
 	public ResponseEntity<?> signUp(@RequestBody User user) {
@@ -50,16 +61,21 @@ public class Controller implements ControllerInterface {
 		if(service.checkWallet(user.getWallet()) && user.getWallet()!=null) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("Il wallet non è conforme allo standard");
 		}
-		
 		User tempUser;
 		try {
 			tempUser = service.addUser(user);
-		}catch(Exception e){ //placeholder per prendere l'eccezione se il salvataggio dello user non va a buon fine
+		}catch(Exception e){ 
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Errore nella creazione dell'utente");
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).body(tempUser);
 	}
 	//methods change user data --------------------------------------------------------------------
+	/*methods for change password-> response:
+		- Correct update of password = HttpStatus.ok + user data
+		- User not found = HttpStatus.notFound + error message
+		- Incorrect userPayload value = HttpStatus.badRequest + error message
+		- Error update password = HttpStatus.internalServerError + error message
+	 */
 	@PutMapping("/user/password")
 	@Override
 	public ResponseEntity<?> changePassword(@RequestBody UserPayload userPayload) {
@@ -76,11 +92,16 @@ public class Controller implements ControllerInterface {
 				return ResponseEntity.ok().body(tempUser);
 				
 			}catch(Exception e) {
-				return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 			}
 		}
 		return ResponseEntity.notFound().build();
 	}
+	/*methods for change user data-> response:
+		- Correct update of data = HttpStatus.ok + user data
+		- User not found = HttpStatus.notFound + error message
+		- Error update data = HttpStatus.internalServerError + error message
+	 */
 	@PutMapping("/user/{id}")
 	@Override
 	public ResponseEntity<?> modifyData(@RequestBody User user,@PathVariable("id") int id){
@@ -91,7 +112,7 @@ public class Controller implements ControllerInterface {
 				tempUser = service.updateUserData(user);
 			}catch(Exception e){ //placeholder per prendere l'eccezione se il salvataggio dello user non va a buon fine
 				e.printStackTrace();
-				return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 			}
 			return ResponseEntity.ok().body(tempUser);
 		}

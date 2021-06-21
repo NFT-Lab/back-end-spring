@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableDiscoveryClient
 @EnableJpaRepositories("repository")
 @EntityScan(basePackages = "user")
-@ComponentScan(basePackages = {"controller","service","configuration"})
+@ComponentScan(basePackages = {"controller","service"})
 public class UserServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(UserServiceApplication.class, args);
