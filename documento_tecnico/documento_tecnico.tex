@@ -1,0 +1,38 @@
+\input{package}
+\input{config}
+\begin{document}
+	\makeatletter
+	\begin{titlepage}
+		\begin{center}
+			\vspace*{2,0cm}
+			\author{Andrea Cecchin}
+			\title{Documento Tecnico}
+			\date{}
+			\includegraphics[width=0.5\linewidth]{./immagini/logo.png}\\[4ex]
+
+			
+			{\huge \bfseries  \@title }\\[2ex] 
+			{\LARGE  \@author}\\[50ex]
+			\vspace*{-9,0cm}
+			
+		\vspace{4cm}
+		Il codice è disponibile nella repository pubblica di Github al seguente link:
+		\begin{center}
+			\url{https://github.com/NFT-Lab/back-end-spring}
+		\end{center}
+	\vspace{2cm}
+		\hfill \break
+		\fontsize{17}{10}\textbf{Sommario} \\
+		\vspace{0.1cm}
+		Il presente documento contiene le scelte architetturali che sono state implementate all'interno del progetto NFTLab. Contiene i design pattern e i diagrammi di attività, sequenza, classi e package.
+		\end{center}
+	\end{titlepage}
+	\makeatother
+	
+	\tableofcontents{}
+
+	\input{./capitoli/architettura}
+	\input{./capitoli/descrizione_servizi}
+	% bibliography, glossary and index would go here.
+	
+\end{document}
