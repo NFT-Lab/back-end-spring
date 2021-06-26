@@ -39,7 +39,6 @@ class UserServiceApplicationTests {
 		
 		User savedUser = service.addUser(user);
 		
-		System.out.println(user.getName());
 		assertThat(savedUser.getEmail()).isNotNull();
 	}
 	@Test

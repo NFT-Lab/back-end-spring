@@ -12,7 +12,7 @@ import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
 
-import io.nfteam.nftlab.contracts.NFTLabStore;
+import io.nfteam.nftlab.contracts.NFTLabStoreEthereum;
 import io.nfteam.nftlab.services.NFTContractService;
 import io.nfteam.nftlab.services.NFTETHContractService;
 import io.nfteam.nftlab.services.ipfs.IPFSPinataService;
@@ -37,7 +37,7 @@ public class TransactionConfiguration {
 	    	ContractGasProvider cgp = new StaticGasProvider(BigInteger.valueOf(20000000000L),BigInteger.valueOf(6721975L));
 	    	System.out.println("Ho creato gas");
 	    	
-	    	NFTLabStore store = NFTETHContractService.loadContract("0x5c4533a6a0e0ccb5cb7d81bb238e9f1c592fed7c",web3j, cred, cgp);
+	    	NFTLabStoreEthereum store = NFTETHContractService.load("0x5c4533a6a0e0ccb5cb7d81bb238e9f1c592fed7c",web3j, cred, cgp);
 	    	System.out.println("Ho creato store " + store.getContractAddress());
 	    	
 	    	IPFSService ipfs = new IPFSPinataService("https://api.pinata.cloud/","e46660a6e97946b6c0fc","3ed15d7caa100d83dd46aba6ec5941af8b14bda22d1169a0435c043c02db3189", new RestTemplate());
