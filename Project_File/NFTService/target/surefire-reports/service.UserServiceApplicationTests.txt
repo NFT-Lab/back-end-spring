@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: service.UserServiceApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 1.717 s <<< FAILURE! - in service.UserServiceApplicationTests
+service.UserServiceApplicationTests.saveOperaTest  Time elapsed: 0.06 s  <<< ERROR!
+java.nio.file.FileAlreadyExistsException: gallery\img\test.txt
+	at service.UserServiceApplicationTests.saveOperaTest(NftServiceApplicationTests.java:100)
+
